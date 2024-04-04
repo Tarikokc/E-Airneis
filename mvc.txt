@@ -1,0 +1,18 @@
+User
+De facon simple explique moi les dossiers
+ChatGPT
+Bien sûr, voici une explication simple des principaux dossiers que l'on trouve généralement dans une application Symfony :
+
+src/ : C'est le répertoire où vous placez tout le code source de votre application Symfony. Il contient plusieurs sous-répertoires :
+
+Controller/ : Ce répertoire contient les contrôleurs de votre application. Les contrôleurs sont responsables de recevoir les requêtes HTTP et de renvoyer les réponses appropriées.
+
+Entity/ : Ce répertoire est destiné à contenir les classes d'entités. Les entités représentent généralement les objets métier de votre application et correspondent souvent à des tables dans votre base de données.
+
+Repository/ : Ce répertoire contient généralement les classes de repository. Ces classes sont utilisées pour interagir avec la base de données et exécuter des requêtes pour récupérer, insérer, mettre à jour ou supprimer des entités.
+
+Templates/ : Ce répertoire contient les templates Twig utilisés pour générer les vues de votre application. Les templates sont des fichiers HTML avec des balises Twig pour insérer des variables et des boucles.
+
+public/ : C'est le répertoire public de votre application. C'est là que vous placez les fichiers accessibles publiquement, tels que les fichiers CSS, JavaScript, les images, etc. Le point d'entrée de votre application, index.php, se trouve également dans ce répertoire.
+
+composer.json et composer.lock : Ce sont les fichiers de configuration pour Composer, l'outil de gestion des dépendances PHP. composer.json contient la liste des dépendances de votre projet, tandis que composer.lock enregistre les versions exactes des dépendances installées.
