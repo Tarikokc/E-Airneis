@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/dbal": "^3",
@@ -27,6 +27,7 @@
         "symfony/http-client": "7.0.*",
         "symfony/intl": "7.0.*",
         "symfony/mailer": "7.0.*",
+        "symfony/mercure-bundle": "^0.3.8",
         "symfony/mime": "7.0.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "7.0.*",
