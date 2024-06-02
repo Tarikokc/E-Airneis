@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductPhotoRepository::class)]
+#[ORM\Table(name: "productphotos")] // Utilisez "products" au lieu de "produits"
+// #[Broadcast]
+
 class ProductPhoto
 {
     #[ORM\Id]
@@ -22,7 +25,7 @@ class ProductPhoto
     private ?string $photoUrl = null;
 
     #[ORM\ManyToOne(targetEntity: Produits::class, inversedBy: 'productPhotos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id", nullable: false)]
     private ?Produits $product = null;
 
     
