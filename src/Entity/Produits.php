@@ -5,31 +5,43 @@ namespace App\Entity;
 use App\Repository\ProduitsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Doctrine\Common\Collections\Collection; // Ajoutez cette ligne
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
+#[ORM\Table(name: "products")] // Utilisez "products" au lieu de "produits"
 #[Broadcast]
 class Produits
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
 
-    #[ORM\Column(length: 255)]
+
+    private ?int $productId = null; // Renommez en $productId
+
+    #[ORM\Column(name: "name", length: 255)]
     private ?string $Nom = null;
 
     #[ORM\Column(length: 255)]
     private ?string $Description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "price")]
     private ?int $prix = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "stock_quantity")]
     private ?int $Stock = null;
 
+    // #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
+    // #[Groups("product:read")]
+    // private Collection $productPhotos;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class, fetch: "EAGER")]
+    #[Groups("product:read")]
+    private Collection $productPhotos;
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->productId;
     }
 
     public function getNom(): ?string
@@ -78,5 +90,9 @@ class Produits
         $this->Stock = $Stock;
 
         return $this;
+    }
+    public function getProductPhotos(): Collection
+    {
+        return $this->productPhotos;
     }
 }

@@ -3,3 +3,8 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+# config/routes.yaml
+index:
+    path: /
+    controller: App\Controller\ProduitController::index # Remplacez HomeController par votre contrôleur réel
