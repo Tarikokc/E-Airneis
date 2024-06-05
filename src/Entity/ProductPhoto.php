@@ -1,38 +1,35 @@
 <?php
 
-// src/Entity/ProductPhoto.php
 namespace App\Entity;
 
 use App\Repository\ProductPhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductPhotoRepository::class)]
 #[ORM\Table(name: "productphotos")] // Utilisez "products" au lieu de "produits"
-// #[Broadcast]
-
+#[Broadcast]
 class ProductPhoto
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "photo_id")] // Indiquez que product_id est l'ID
-    
+    #[ORM\Column(name: "photo_id")]
+    private ?int $id = null;
 
-    private ?int $photoId = null;
-
-    #[ORM\Column(name : "photo_url",length: 255)]
-    #[Groups("product:read")] // Ajoutez cette annotation pour inclure l'URL de la photo dans la réponse JSON
+    #[ORM\Column(name: "photo_url", length: 255)]
+    #[Groups("product:read")]
     private ?string $photoUrl = null;
 
-    #[ORM\ManyToOne(targetEntity: Produits::class, inversedBy: 'productPhotos')]
-    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id", nullable: false)]
+    #[ORM\Column(name: "is_primary")]
+    private ?bool $isPrimary = null;
+
+    #[ORM\ManyToOne(inversedBy: 'productPhotos')]
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")]
     private ?Produits $product = null;
-
-    
-
     public function getId(): ?int
     {
-        return $this->photoId;
+        return $this->id;
     }
 
     public function getPhotoUrl(): ?string
@@ -40,9 +37,21 @@ class ProductPhoto
         return $this->photoUrl;
     }
 
-    public function setPhotoUrl(string $photoUrl): static
+    public function setPhotoUrl(string $photoUrl): self
     {
         $this->photoUrl = $photoUrl;
+
+        return $this;
+    }
+
+    public function isIsPrimary(): ?bool
+    {
+        return $this->isPrimary;
+    }
+
+    public function setIsPrimary(bool $isPrimary): self
+    {
+        $this->isPrimary = $isPrimary;
 
         return $this;
     }
@@ -52,7 +61,7 @@ class ProductPhoto
         return $this->product;
     }
 
-    public function setProduct(?Produits $product): static
+    public function setProduct(?Produits $product): self
     {
         $this->product = $product;
 

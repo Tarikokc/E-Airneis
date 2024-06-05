@@ -7,39 +7,47 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Doctrine\Common\Collections\Collection; // Ajoutez cette ligne
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
 #[ORM\Table(name: "products")] // Utilisez "products" au lieu de "produits"
 #[Broadcast]
 class Produits
 {
+    public function __construct()
+    {
+        $this->productPhotos = new ArrayCollection();
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups("product:read")]
     #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
 
 
     private ?int $productId = null; // Renommez en $productId
 
+    #[Groups("product:read")]
     #[ORM\Column(name: "name", length: 255)]
     private ?string $Nom = null;
 
+    #[Groups("product:read")]
     #[ORM\Column(length: 255)]
     private ?string $Description = null;
 
+    #[Groups("product:read")]
     #[ORM\Column(name: "price")]
     private ?int $prix = null;
 
+    #[Groups("product:read")]
     #[ORM\Column(name: "stock_quantity")]
     private ?int $Stock = null;
 
-    // #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
-    // #[Groups("product:read")]
-    // private Collection $productPhotos;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class, fetch: "EAGER")]
-    #[Groups("product:read")]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
+    #[Groups("product:read")] // Ajoute cette annotation pour inclure les photos dans la sérialisation
     private Collection $productPhotos;
-    public function getId(): ?int
+
+
+    public function getProductId(): ?int
     {
         return $this->productId;
     }
@@ -91,8 +99,33 @@ class Produits
 
         return $this;
     }
+    /**
+     * @return Collection<int, ProductPhoto>
+     */
     public function getProductPhotos(): Collection
     {
         return $this->productPhotos;
+    }
+
+    public function addProductPhoto(ProductPhoto $productPhoto): self
+    {
+        if (!$this->productPhotos->contains($productPhoto)) {
+            $this->productPhotos->add($productPhoto);
+            $productPhoto->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductPhoto(ProductPhoto $productPhoto): self
+    {
+        if ($this->productPhotos->removeElement($productPhoto)) {
+            // set the owning side to null (unless already changed)
+            if ($productPhoto->getProduct() === $this) {
+                $productPhoto->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

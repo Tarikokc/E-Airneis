@@ -65,8 +65,15 @@ class ProduitController extends AbstractController
     #[Route('/produit', name: 'app_produit')]
     public function index(): Response
     {
+        // Récupérer les produits depuis l'API
+        // $response = $this->forward('App\Controller\ProduitController::getProduits'); // Appelle la méthode de l'API
+        // $produits = json_decode($response->getContent(), true); // Décode la réponse JSON
+        $produits = $this->produitRepository->findAllWithPhotos();
+
         return $this->render('produit/index.html.twig', [
-            'controller_name' => 'ProduitController',
+            // 'controller_name' => 'ProduitController',
+            'produits' => $produits, // Passe les produits décodés au template
+
         ]);
     }
 }

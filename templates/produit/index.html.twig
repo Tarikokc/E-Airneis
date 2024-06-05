@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProduitController!{% endblock %}
+{% block title %}Nos Produits{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="example-wrapper">
+        <h1>Nos Produits</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="product-list">
+            {% for produit in produits %}
+                <div class="product-item">
+                    <h2>{{ produit.Nom }}</h2>
+                    <p>{{ produit.Description }}</p>
+                    <p>Prix: {{ produit.prix }} €</p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/E-Airneis/E-Airneis/src/Controller/ProduitController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/E-Airneis/E-Airneis/templates/produit/index.html.twig</code></li>
-    </ul>
-</div>
+                    <h3>Photos</h3>
+                    <ul class="product-photos">
+                        {% for photo in produit.productPhotos %}
+                            <li>
+                                <img src="{{ photo.photoUrl }}" alt="Photo du produit {{ produit.Nom }}" />
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
