@@ -43,9 +43,12 @@ class Produits
     private ?int $Stock = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
-    #[Groups("product:read")] // Ajoute cette annotation pour inclure les photos dans la sérialisation
+    #[Groups("product:read")] 
     private Collection $productPhotos;
 
+    #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id")]
+    private ?Categories $category = null;
 
     public function getProductId(): ?int
     {
@@ -125,6 +128,18 @@ class Produits
                 $productPhoto->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

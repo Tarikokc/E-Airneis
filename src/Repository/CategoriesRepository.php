@@ -20,6 +20,16 @@ class CategoriesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Categories::class);
     }
+    public function findAllWithProductImage()
+    {
+        return $this->createQueryBuilder('c') // Alias pour ProductCategory
+            ->select('c.categoryId', 'c.categoryName', 'photo.photoUrl AS defaultPhotoUrl') // Sélectionne directement les données
+            ->leftJoin('c.produits', 'p') 
+            ->leftJoin('p.productPhotos', 'photo')
+            ->groupBy('c.categoryId') 
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Categories[] Returns an array of Categories objects
