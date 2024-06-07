@@ -58,8 +58,20 @@ class ProduitController extends AbstractController
         // return $this->json($produitsNormalises);
         // return $this->json($produits); 
         return $this->json($produits, 200, [], ['groups' => 'product:read']);
+    }
 
+    #[Route('/api/produit/{productId}', name: 'app_single_produit_api', methods: ['GET'])]
+    public function getProduct(int $productId): JsonResponse
+    {
+        $product = $this->produitRepository->find($productId);
 
+        if (!$product) {
+            return $this->json([
+                'message' => 'Produit non trouvé.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($product, 200, [], ['groups' => 'product:read']);
     }
 
     #[Route('/produit', name: 'app_produit')]
