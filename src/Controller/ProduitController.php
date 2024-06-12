@@ -1,5 +1,6 @@
 <?php
 
+// src/Controller/ProduitController.php
 namespace App\Controller;
 
 use App\Repository\ProduitsRepository;

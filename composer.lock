@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90e7d3687c2c24348d1899c47d2e3802",
+    "content-hash": "e1dfee8f44866931af95f88484d5966f",
     "packages": [
         {
             "name": "composer/semver",
@@ -4536,16 +4536,16 @@
         },
         {
             "name": "symfony/mercure-bundle",
-            "version": "v0.3.8",
+            "version": "v0.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mercure-bundle.git",
-                "reference": "e21ad84694b84c9a3c94bedf4edd82b66728abfc"
+                "reference": "77435d740b228e9f5f3f065b6db564f85f2cdb64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mercure-bundle/zipball/e21ad84694b84c9a3c94bedf4edd82b66728abfc",
-                "reference": "e21ad84694b84c9a3c94bedf4edd82b66728abfc",
+                "url": "https://api.github.com/repos/symfony/mercure-bundle/zipball/77435d740b228e9f5f3f065b6db564f85f2cdb64",
+                "reference": "77435d740b228e9f5f3f065b6db564f85f2cdb64",
                 "shasum": ""
             },
             "require": {
@@ -4601,7 +4601,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/mercure-bundle/issues",
-                "source": "https://github.com/symfony/mercure-bundle/tree/v0.3.8"
+                "source": "https://github.com/symfony/mercure-bundle/tree/v0.3.9"
             },
             "funding": [
                 {
@@ -4613,7 +4613,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-03T22:26:24+00:00"
+            "time": "2024-05-31T09:07:18+00:00"
         },
         {
             "name": "symfony/messenger",
@@ -7135,16 +7135,16 @@
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.16.0",
+            "version": "v2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "d3590a43fee73304855dfc8022ccb57b0df9f03d"
+                "reference": "e447231ddcc09ab68d29047f47d31a524837dc7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/d3590a43fee73304855dfc8022ccb57b0df9f03d",
-                "reference": "d3590a43fee73304855dfc8022ccb57b0df9f03d",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/e447231ddcc09ab68d29047f47d31a524837dc7a",
+                "reference": "e447231ddcc09ab68d29047f47d31a524837dc7a",
                 "shasum": ""
             },
             "require": {
@@ -7155,6 +7155,7 @@
                 "symfony/flex": "<1.13"
             },
             "require-dev": {
+                "dbrekelmans/bdi": "dev-main",
                 "doctrine/doctrine-bundle": "^2.4.3",
                 "doctrine/orm": "^2.8 | 3.0",
                 "phpstan/phpstan": "^1.10",
@@ -7211,7 +7212,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.16.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.18.0"
             },
             "funding": [
                 {
@@ -7227,7 +7228,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-20T16:11:17+00:00"
+            "time": "2024-06-01T17:56:14+00:00"
         },
         {
             "name": "symfony/validator",
