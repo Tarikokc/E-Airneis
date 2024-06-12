@@ -13,20 +13,20 @@ class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "order_id")] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
+    #[ORM\Column(name: "order_id")]
     private ?int $orderId = null;
 
-    #[ORM\Column(name: "order_date", type: "date")] // Nom de la colonne corrigé
+    #[ORM\Column(name: "order_date", type: "date")]
     private ?\DateTimeInterface $orderDate = null;
 
-    #[ORM\Column(name: "total_amount", type: "decimal", precision: 10, scale: 2)] // Nom de la colonne corrigé
-    private ?float $totalAmount = null; // Utilisez float pour les montants décimaux
+    #[ORM\Column(name: "total_amount", type: "decimal", precision: 10, scale: 2)]
+    private ?float $totalAmount = null; 
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
-    private ?User $user = null; // Changement du type en User (entité)
+    private ?User $user = null; 
 
-    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderDetail::class, cascade: ["persist"])] // Correction de "mappedBy"
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderDetail::class, cascade: ["persist"])]
     private Collection $orderDetails;
 
     public function __construct()
@@ -34,5 +34,29 @@ class Order
         $this->orderDetails = new ArrayCollection();
     }
 
-    // ... (Getters et setters pour toutes les propriétés)
+    // Getters
+    public function getOrderId(): ?int { return $this->orderId; }
+    public function getOrderDate(): ?\DateTimeInterface { return $this->orderDate; }
+    public function getTotalAmount(): ?float { return $this->totalAmount; }
+    public function getUser(): ?User { return $this->user; }
+    public function getOrderDetails(): Collection { return $this->orderDetails; }
+
+    // Setters
+    public function setOrderDate(?\DateTimeInterface $orderDate): self
+    {
+        $this->orderDate = $orderDate;
+        return $this; // Permet le chainage de méthodes (fluent interface)
+    }
+
+    public function setTotalAmount(?float $totalAmount): self
+    {
+        $this->totalAmount = $totalAmount;
+        return $this;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
 }
