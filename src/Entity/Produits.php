@@ -3,53 +3,57 @@
 namespace App\Entity;
 
 use App\Repository\ProduitsRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\UX\Turbo\Attribute\Broadcast;
-use Doctrine\Common\Collections\Collection; // Ajoutez cette ligne
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
-#[ORM\Table(name: "products")] // Utilisez "products" au lieu de "produits"
+#[ORM\Table(name: "products")]
 #[Broadcast]
 class Produits
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: "product_id")]
+    #[Groups("product:read")]
+    private ?int $productId = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups("product:read")]
+    private ?string $Nom = null;
+
+    #[ORM\Column(type: "text", nullable: true)]
+    #[Groups("product:read")]
+    private ?string $Description = null;
+
+    #[ORM\Column]
+    #[Groups("product:read")]
+    private ?float $prix = null;
+
+    #[ORM\Column(name: "stock_quantity")]
+    #[Groups("product:read")]
+    private ?int $Stock = null;
+
+    #[ORM\ManyToOne(targetEntity: ProductCategories::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id", nullable: false)]
+    private ?ProductCategories $category = null;
+
+    #[ORM\ManyToOne(targetEntity: Designers::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: "designer_id", referencedColumnName: "designer_id", nullable: true)]
+    private ?Designers $designer = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhotos::class, cascade: ["persist"])]
+    #[Groups("product:read")]
+    private Collection $productPhotos;
+
     public function __construct()
     {
         $this->productPhotos = new ArrayCollection();
     }
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[Groups("product:read")]
-    #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
 
-
-    private ?int $productId = null; // Renommez en $productId
-
-    #[Groups("product:read")]
-    #[ORM\Column(name: "name", length: 255)]
-    private ?string $Nom = null;
-
-    #[Groups("product:read")]
-    #[ORM\Column(length: 255)]
-    private ?string $Description = null;
-
-    #[Groups("product:read")]
-    #[ORM\Column(name: "price")]
-    private ?int $prix = null;
-
-    #[Groups("product:read")]
-    #[ORM\Column(name: "stock_quantity")]
-    private ?int $Stock = null;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
-    #[Groups("product:read")] 
-    private Collection $productPhotos;
-
-    #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
-    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id")]
-    private ?Categories $category = null;
-
+    // Getters and Setters (corrigés et complets)
     public function getProductId(): ?int
     {
         return $this->productId;
@@ -60,11 +64,10 @@ class Produits
         return $this->Nom;
     }
 
-    public function setNom(string $Nom): static
+    public function setNom(string $Nom): self
     {
         $this->Nom = $Nom;
-
-        return $this;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
     }
 
     public function getDescription(): ?string
@@ -72,23 +75,21 @@ class Produits
         return $this->Description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(?string $Description): self
     {
         $this->Description = $Description;
-
-        return $this;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
     }
 
-    public function getPrix(): ?int
+    public function getPrix(): ?float
     {
         return $this->prix;
     }
 
-    public function setPrix(int $prix): static
+    public function setPrix(float $prix): self
     {
         $this->prix = $prix;
-
-        return $this;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
     }
 
     public function getStock(): ?int
@@ -96,21 +97,43 @@ class Produits
         return $this->Stock;
     }
 
-    public function setStock(int $Stock): static
+    public function setStock(int $Stock): self
     {
         $this->Stock = $Stock;
-
-        return $this;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
     }
+
+    public function getCategory(): ?ProductCategories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?ProductCategories $category): self
+    {
+        $this->category = $category;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
+    }
+
+    public function getDesigner(): ?Designers
+    {
+        return $this->designer;
+    }
+
+    public function setDesigner(?Designers $designer): self
+    {
+        $this->designer = $designer;
+        return $this; // Renvoie l'objet lui-même pour le chaînage de méthodes
+    }
+
     /**
-     * @return Collection<int, ProductPhoto>
+     * @return Collection<int, ProductPhotos>
      */
     public function getProductPhotos(): Collection
     {
         return $this->productPhotos;
     }
 
-    public function addProductPhoto(ProductPhoto $productPhoto): self
+    public function addProductPhoto(ProductPhotos $productPhoto): self
     {
         if (!$this->productPhotos->contains($productPhoto)) {
             $this->productPhotos->add($productPhoto);
@@ -120,7 +143,7 @@ class Produits
         return $this;
     }
 
-    public function removeProductPhoto(ProductPhoto $productPhoto): self
+    public function removeProductPhoto(ProductPhotos $productPhoto): self
     {
         if ($this->productPhotos->removeElement($productPhoto)) {
             // set the owning side to null (unless already changed)
@@ -128,18 +151,6 @@ class Produits
                 $productPhoto->setProduct(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCategory(): ?Categories
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Categories $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }

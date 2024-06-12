@@ -8,32 +8,31 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: "orders")] // Nom de la table dans la base de données
+#[ORM\Table(name: "orders")] 
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $orderId = null; // Utilisation de orderId pour correspondre à la BD
+    #[ORM\Column(name: "order_id")] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
+    private ?int $orderId = null;
 
-    #[ORM\Column(type: "date")]
+    #[ORM\Column(name: "order_date", type: "date")] // Nom de la colonne corrigé
     private ?\DateTimeInterface $orderDate = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private ?string $totalAmount = null;
+    #[ORM\Column(name: "total_amount", type: "decimal", precision: 10, scale: 2)] // Nom de la colonne corrigé
+    private ?float $totalAmount = null; // Utilisez float pour les montants décimaux
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
-    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id")] // Relation avec la table users
-    private ?User $userId = null;
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
+    private ?User $user = null; // Changement du type en User (entité)
 
-    #[ORM\OneToMany(mappedBy: "orderId", targetEntity: OrderDetail::class)]
-    private Collection $orderDetails; // Relation avec les détails de commande
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderDetail::class, cascade: ["persist"])] // Correction de "mappedBy"
+    private Collection $orderDetails;
 
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
     }
 
-    // Getters and setters (ajoutez les méthodes pour les autres propriétés)
-    // ...
+    // ... (Getters et setters pour toutes les propriétés)
 }
