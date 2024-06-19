@@ -1,44 +1,44 @@
 <?php
+
 // src/Controller/ProduitController.php
 namespace App\Controller;
 
 use App\Repository\ProduitsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response; // Correction ici
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ProduitController extends AbstractController
 {
-    private $normalizer;
     private $produitRepository;
+    private $serializer;
 
-    public function __construct(NormalizerInterface $normalizer, ProduitsRepository $produitRepository)
+    public function __construct(ProduitsRepository $produitRepository, SerializerInterface $serializer)
     {
-        $this->normalizer = $normalizer;
         $this->produitRepository = $produitRepository;
+        $this->serializer = $serializer;
     }
 
     #[Route('/api/produits', name: 'app_produit_api', methods: ['GET'])]
-    public function getProduits(): JsonResponse
+    public function getProduits(Request $request): JsonResponse
     {
-        $produits = $this->produitRepository->findAll();
+        $searchTerm = $request->query->get('search');
 
-        if (!$produits) {
-            return $this->json([
-                'message' => 'Aucun produit trouvé.'
-            ], Response::HTTP_NOT_FOUND);
+        if ($searchTerm) {
+            $produits = $this->produitRepository->findBySearchTerm($searchTerm);
+        } else {
+            $produits = $this->produitRepository->findAll();
         }
 
-        $produitsNormalises = [];
-        foreach ($produits as $produit) {
-            $produitsNormalises[] = $this->normalizer->normalize($produit, null, ['groups' => 'products']);
+        if (empty($produits)) {
+            return $this->json(['message' => 'Aucun produit trouvé.'], Response::HTTP_NOT_FOUND);
         }
 
-        // return $this->json($produitsNormalises);
-        // return $this->json($produits); 
-        return $this->json($produits, 200, [], ['groups' => 'product:read']);
+        $jsonContent = $this->serializer->serialize($produits, 'json', ['groups' => 'product:read']);
+        return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/produit/{productId}', name: 'app_single_produit_api', methods: ['GET'])]
@@ -47,26 +47,20 @@ class ProduitController extends AbstractController
         $product = $this->produitRepository->find($productId);
 
         if (!$product) {
-            return $this->json([
-                'message' => 'Produit non trouvé.',
-            ], Response::HTTP_NOT_FOUND);
+            return $this->json(['message' => 'Produit non trouvé.'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($product, 200, [], ['groups' => 'product:read']);
+        $jsonContent = $this->serializer->serialize($product, 'json', ['groups' => 'product:read']);
+        return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
     #[Route('/produit', name: 'app_produit')]
     public function index(): Response
     {
-        // Récupérer les produits depuis l'API
-        // $response = $this->forward('App\Controller\ProduitController::getProduits'); // Appelle la méthode de l'API
-        // $produits = json_decode($response->getContent(), true); // Décode la réponse JSON
         $produits = $this->produitRepository->findAllWithPhotos();
 
         return $this->render('produit/index.html.twig', [
-            // 'controller_name' => 'ProduitController',
-            'produits' => $produits, // Passe les produits décodés au template
-
+            'produits' => $produits,
         ]);
     }
 }
