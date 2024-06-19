@@ -20,4 +20,21 @@ class CategorieController extends AbstractController
 
         return $this->json($categories, 200, [], ['groups' => 'category:read']);
     }
+
+    #[Route('/api/categories/{categoryId}', name: 'app_category_api', methods: ['GET'])] // Nouvelle route
+    public function getCategory(int $categoryId, CategoriesRepository $categoryRepository): JsonResponse
+    {
+        $category = $categoryRepository->find($categoryId);
+        return $this->json($category, 200, [], ['groups' => 'category:read']);
+    }
+
+    #[Route('/api/categories/{categoryId}/produits', name: 'app_category_products_api', methods: ['GET'])]
+    public function getCategoryProducts(
+        int $categoryId,
+        ProduitsRepository $produitsRepository 
+    ): JsonResponse {
+        $products = $produitsRepository->findBy(['category' => $categoryId]);
+
+        return $this->json($products, 200, [], ['groups' => 'product:read']);
+    }
 }

@@ -123,7 +123,6 @@ class Produits
     public function removeProductPhoto(ProductPhoto $productPhoto): self
     {
         if ($this->productPhotos->removeElement($productPhoto)) {
-            // set the owning side to null (unless already changed)
             if ($productPhoto->getProduct() === $this) {
                 $productPhoto->setProduct(null);
             }

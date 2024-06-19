@@ -21,14 +21,15 @@ class LoginController extends AbstractController
         Request $request,
         AuthenticationUtils $authenticationUtils,
         UserPasswordHasherInterface $passwordHasher,
-        UserProviderInterface $userProvider,
+        UserProviderInterface $userProvider, // Type-hint ajouté
         LoggerInterface $logger,
         EntityManagerInterface $entityManager 
 
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? null; // Récupérer l'email avec un opérateur de coalescence nulle
-        $password = $data['password'] ?? null; // Récupérer le mot de passe avec un opérateur de coalescence nulle
+        $email = strtolower($data['email'] ?? ''); // Normalisation de l'email
+        // $password = $data['password'] ?? null; // Récupérer le mot de passe avec un opérateur de coalescence nulle
+        $password = $data['password'] ?? '';
 
         if (!$email || !$password) { // Vérifier si l'email ou le mot de passe sont vides
             $logger->error('Email or password missing');
@@ -54,6 +55,8 @@ class LoginController extends AbstractController
         $entityManager->flush(); // Enregistrer les modifications dans la base de données
 
         $logger->info('User logged in successfully', ['user' => $user->getUserIdentifier()]); // Utilisation de getUserIdentifier()
+        dd($user); // Afficher le contenu de $user pour vérifier s'il est chargé correctement
+
         return new JsonResponse([
             'token' => $token,
             'user' => [
