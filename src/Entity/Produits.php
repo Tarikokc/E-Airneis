@@ -17,6 +17,8 @@ class Produits
     public function __construct()
     {
         $this->productPhotos = new ArrayCollection();
+        $this->materiaux = new ArrayCollection(); // 
+
     }
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,6 +51,17 @@ class Produits
     #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id")]
     private ?Categories $category = null;
+
+   
+
+    #[ORM\ManyToMany(targetEntity: Materiaux::class, inversedBy: "produits", fetch: "EAGER")]
+    #[ORM\JoinTable(
+        name: "product_materials",
+        joinColumns: [new ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "material_id", referencedColumnName: "material_id")]
+    )]
+    #[Groups("product:read")]
+    private Collection $materiaux;
 
     public function getProductId(): ?int
     {
@@ -139,6 +152,27 @@ class Produits
     public function setCategory(?Categories $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getMateriaux(): Collection
+    {
+        return $this->materiaux;
+    }
+
+    public function addMateriaux(Materiaux $materiaux): self
+    {
+        if (!$this->materiaux->contains($materiaux)) {
+            $this->materiaux->add($materiaux);
+        }
+
+        return $this;
+    }
+
+    public function removeMateriaux(Materiaux $materiaux): self
+    {
+        $this->materiaux->removeElement($materiaux);
 
         return $this;
     }

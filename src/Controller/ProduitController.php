@@ -4,12 +4,14 @@
 namespace App\Controller;
 
 use App\Repository\ProduitsRepository;
+use App\Entity\Produits;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProduitController extends AbstractController
 {
@@ -22,22 +24,51 @@ class ProduitController extends AbstractController
         $this->serializer = $serializer;
     }
 
+    // #[Route('/api/produits', name: 'app_produit_api', methods: ['GET'])]
+    // public function getProduits(Request $request): JsonResponse
+    // {
+    //     $searchTerm = $request->query->get('search');
+
+    //     if ($searchTerm) {
+    //         $produits = $this->produitRepository->findBySearchTerm($searchTerm);
+    //     } else {
+    //         $produits = $this->produitRepository->findAll();
+    //     }
+
+    //     if (empty($produits)) {
+    //         return $this->json(['message' => 'Aucun produit trouvé.'], Response::HTTP_NOT_FOUND);
+    //     }
+
+    //     $jsonContent = $this->serializer->serialize($produits, 'json', ['groups' => 'product:read']);
+    //     return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
+    // }
     #[Route('/api/produits', name: 'app_produit_api', methods: ['GET'])]
-    public function getProduits(Request $request): JsonResponse
+    public function getProduits(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $searchTerm = $request->query->get('search');
+        $produits = $this->produitRepository->findAll();
 
         if ($searchTerm) {
             $produits = $this->produitRepository->findBySearchTerm($searchTerm);
         } else {
-            $produits = $this->produitRepository->findAll();
+            // Utiliser le QueryBuilder pour inclure les matériaux
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder
+                ->select('p', 'm')
+                ->from(Produits::class, 'p')
+                ->leftJoin('p.materiaux', 'm'); // Jointure gauche avec les matériaux
+
+            $produits = $queryBuilder->getQuery()->getResult();
         }
 
         if (empty($produits)) {
             return $this->json(['message' => 'Aucun produit trouvé.'], Response::HTTP_NOT_FOUND);
         }
-
-        $jsonContent = $this->serializer->serialize($produits, 'json', ['groups' => 'product:read']);
+        foreach ($produits as $produit) {
+            $produit->getMateriaux()->toArray(); // Forcer le chargement des matériaux
+        }
+        // Sérialiser les produits avec les matériaux
+        $jsonContent = $this->serializer->serialize($produits, 'json', ['groups' => ['product:read', 'materiaux:read']]);
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
@@ -50,7 +81,8 @@ class ProduitController extends AbstractController
             return $this->json(['message' => 'Produit non trouvé.'], Response::HTTP_NOT_FOUND);
         }
 
-        $jsonContent = $this->serializer->serialize($product, 'json', ['groups' => 'product:read']);
+        $jsonContent = $this->serializer->serialize($product, 'json', ['groups' => ['product:read', 'materials:read']]);
+
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
