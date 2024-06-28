@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 class LoginController extends AbstractController
 {
-    #[Route('/api/login', name: 'app_login', methods: ['POST'])] // Correction de la méthode HTTP
+    #[Route('/api/login', name: 'app_login', methods: ['POST'])] 
     public function login(
         Request $request,
         AuthenticationUtils $authenticationUtils,
@@ -27,8 +27,9 @@ class LoginController extends AbstractController
 
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $email = strtolower($data['email'] ?? ''); // Normalisation de l'email
+        $email = strtolower($data['email'] ?? '');
         // $password = $data['password'] ?? null; // Récupérer le mot de passe avec un opérateur de coalescence nulle
+        
         $password = $data['password'] ?? '';
 
         if (!$email || !$password) { // Vérifier si l'email ou le mot de passe sont vides
@@ -55,7 +56,7 @@ class LoginController extends AbstractController
         $entityManager->flush(); // Enregistrer les modifications dans la base de données
 
         $logger->info('User logged in successfully', ['user' => $user->getUserIdentifier()]); // Utilisation de getUserIdentifier()
-        dd($user); // Afficher le contenu de $user pour vérifier s'il est chargé correctement
+        
 
         return new JsonResponse([
             'token' => $token,
