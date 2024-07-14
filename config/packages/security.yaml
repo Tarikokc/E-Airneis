@@ -5,15 +5,19 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
     # used to reload user from session & other features (e.g. switch_user)
-    
-        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email # Ou 'username' si vous utilisez ce champ dans votre entité User
+        # users_in_memory: { memory: null }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            # provider: users_in_memory
+            provider: app_user_provider # Utilisez le nouveau provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
