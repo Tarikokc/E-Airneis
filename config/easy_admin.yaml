@@ -1,0 +1,18 @@
+easy_admin:
+    entities:
+        Produits:
+            class: App\Entity\Produits
+            label: "Produits" 
+            list:
+                title: "Liste des produits"
+                fields: ['product_id', 'name', 'price', 'stock_quantity']
+        User:
+            class: App\Entity\User
+            label: "Utilisateurs"
+            list:
+                title: "Liste des utilisateurs"
+                fields: ['userId', 'firstName', 'lastName', 'email', 'role', 'registrationDate']
+            show:
+                fields: ['userId', 'firstName', 'lastName', 'email', 'address', 'city', 'country', 'phoneNumber', 'registrationDate', 'role']
+            form: 
+                fields: ['email', 'plainPassword', 'firstName', 'lastName', 'address', 'city', 'country', 'phoneNumber', 'registrationDate', 'role'] 

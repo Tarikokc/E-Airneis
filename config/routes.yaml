@@ -8,3 +8,7 @@ controllers:
 index:
     path: /
     controller: App\Controller\ProduitController::index # Remplacez HomeController par votre contrôleur réel
+
+easy_admin_bundle:
+    resource: '@EasyAdminBundle/Controller/'  # Assurez-vous qu'il n'y a pas de "/Admin" ici
+    type: annotation
