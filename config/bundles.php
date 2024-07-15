@@ -15,5 +15,4 @@ return [
     Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
     Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
-    
 ];

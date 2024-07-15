@@ -7,4 +7,8 @@ controllers:
 # config/routes.yaml
 index:
     path: /
-    controller: App\Controller\ProduitController::index # Remplacez HomeController par votre contrôleur réel
+    controller: App\Controller\ProduitController::index 
+
+# easy_admin_bundle:
+#     resource: '@EasyAdminBundle/Controller/'  # Supprimez "/Admin"
+#     type: annotation
