@@ -18,9 +18,9 @@ class OrderDetail
     #[ORM\JoinColumn(name: "order_id", referencedColumnName: "order_id", nullable: false)]
     private ?Order $order = null; // Changement du type en Order (entité)
 
-    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\ManyToOne(targetEntity: Produits::class)]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id", nullable: false)]
-    private ?Product $product = null; // Changement du type en Product (entité)
+    private ?Produits $product = null; // Changement du type en Product (entité)
 
     #[ORM\Column(name: "quantity")] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
     private ?int $quantity = null;
