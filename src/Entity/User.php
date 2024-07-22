@@ -51,6 +51,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)] // Ajout du champ token
     private ?string $token = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $paymentMethod = null;
+
     public function getUserId(): ?int
     {
         return $this->userId;
@@ -212,6 +215,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): self 
     {
         $this->token = $token;
+        return $this;
+    }
+    public function getPaymentMethod(): ?string
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(?string $paymentMethod): self
+    {
+        $this->paymentMethod = $paymentMethod;
         return $this;
     }
 }

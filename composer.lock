@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "a70c2fad5fa6fa6008a96936b5971b11",
-=======
-    "content-hash": "7733b208911fe487ea03b2f10e60a57a",
->>>>>>> c92b98824844f1548066462842b5cdb8d75dbfa6
+    "content-hash": "46cf19df3762895a3ef60df9f755f1b1",
     "packages": [
         {
             "name": "composer/semver",
@@ -1311,16 +1307,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.10.3",
+            "version": "v4.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "4f7ccc7334a8980cae018e929824abe224f2554e"
+                "reference": "8c697782e59dfbd76e6a8cae69d8d3b96dcdbfa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/4f7ccc7334a8980cae018e929824abe224f2554e",
-                "reference": "4f7ccc7334a8980cae018e929824abe224f2554e",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/8c697782e59dfbd76e6a8cae69d8d3b96dcdbfa1",
+                "reference": "8c697782e59dfbd76e6a8cae69d8d3b96dcdbfa1",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1390,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.10.3"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.10.4"
             },
             "funding": [
                 {
@@ -1402,7 +1398,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-26T18:49:30+00:00"
+            "time": "2024-07-12T18:15:07+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2348,16 +2344,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v15.0.0",
+            "version": "v15.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "96f0dbe9c2b5365d716f86d92a27feecca2cbaee"
+                "reference": "0ac234d3651ee7bd4c74c0bc867032742506d6dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/96f0dbe9c2b5365d716f86d92a27feecca2cbaee",
-                "reference": "96f0dbe9c2b5365d716f86d92a27feecca2cbaee",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/0ac234d3651ee7bd4c74c0bc867032742506d6dc",
+                "reference": "0ac234d3651ee7bd4c74c0bc867032742506d6dc",
                 "shasum": ""
             },
             "require": {
@@ -2401,9 +2397,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v15.0.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v15.3.0"
             },
-            "time": "2024-06-24T23:05:11+00:00"
+            "time": "2024-07-18T20:09:01+00:00"
         },
         {
             "name": "symfony/asset",
