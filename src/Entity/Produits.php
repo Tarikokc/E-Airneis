@@ -26,7 +26,7 @@ class Produits
     #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
 
 
-    private ?int $productId = null; // Renommez en $productId
+    private ?int $productId = null; 
 
     #[Groups("product:read")]
     #[ORM\Column(name: "name", length: 255)]

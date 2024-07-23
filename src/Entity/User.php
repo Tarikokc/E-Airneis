@@ -54,6 +54,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $paymentMethod = null;
 
+    
+
     public function getUserId(): ?int
     {
         return $this->userId;

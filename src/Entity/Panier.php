@@ -15,11 +15,13 @@ class Panier
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $uilisateur = null;
+    #[ORM\ManyToOne(targetEntity: User::class)] 
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id")]
+    private ?User $user = null;
 
-    #[ORM\Column]
-    private ?int $produit = null;
+    #[ORM\ManyToOne(targetEntity: Produits::class)] 
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")] 
+    private ?Produits $produit = null;
 
     #[ORM\Column]
     private ?int $quantite = null;
@@ -32,24 +34,24 @@ class Panier
         return $this->id;
     }
 
-    public function getUilisateur(): ?int
+    public function getUser(): ?User
     {
-        return $this->uilisateur;
+        return $this->user;
     }
 
-    public function setUilisateur(int $uilisateur): static
+    public function setUser(?User $user): self
     {
-        $this->uilisateur = $uilisateur;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getProduit(): ?int
+    public function getProduit(): ?Produits
     {
         return $this->produit;
     }
 
-    public function setProduit(int $produit): static
+    public function setProduit(?Produits $produit): static
     {
         $this->produit = $produit;
 

@@ -24,24 +24,7 @@ class ProduitController extends AbstractController
         $this->serializer = $serializer;
     }
 
-    // #[Route('/api/produits', name: 'app_produit_api', methods: ['GET'])]
-    // public function getProduits(Request $request): JsonResponse
-    // {
-    //     $searchTerm = $request->query->get('search');
 
-    //     if ($searchTerm) {
-    //         $produits = $this->produitRepository->findBySearchTerm($searchTerm);
-    //     } else {
-    //         $produits = $this->produitRepository->findAll();
-    //     }
-
-    //     if (empty($produits)) {
-    //         return $this->json(['message' => 'Aucun produit trouvé.'], Response::HTTP_NOT_FOUND);
-    //     }
-
-    //     $jsonContent = $this->serializer->serialize($produits, 'json', ['groups' => 'product:read']);
-    //     return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
-    // }
     #[Route('/api/produits', name: 'app_produit_api', methods: ['GET'])]
     public function getProduits(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
