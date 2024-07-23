@@ -7,6 +7,16 @@ controllers:
 # config/routes.yaml
 index:
     path: /
+    controller: App\Controller\ProduitController::index 
+
+# easy_admin_bundle:
+#     resource: '@EasyAdminBundle/Controller/'
+#     type: annotation
+
+app_contact_submit:
+    path: /api/contact
+    controller: App\Controller\ContactController::submit
+    methods: [POST]
     controller: App\Controller\ProduitController::index # Remplacez HomeController par votre contrôleur réel
 app_order_history:
     path: /api/order/history

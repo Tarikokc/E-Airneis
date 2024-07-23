@@ -21,28 +21,27 @@ class ResearchController extends AbstractController
         MateriauxRepository $materiauxRepository,
         CategoriesRepository $categoriesRepository
     ): JsonResponse {
-        // Récupérer les paramètres de recherche
         $searchTerm = $request->query->get('search');
         $materiaux = $request->query->get('materiaux');
         $prixMin = $request->query->get('prixMin');
         $prixMax = $request->query->get('prixMax');
         $categories = $request->query->get('categories');
         $enStock = $request->query->get('enStock');
-        $sort = $request->query->get('sort'); // Ex: 'prix-asc', 'prix-desc', etc.
+        $sort = $request->query->get('sort'); 
 
         // Traiter les paramètres materiaux et categories (CORRIGÉ)
         if ($materiaux !== "") { // Vérifier si la chaîne est vide
             $materiaux = $materiauxRepository->findBy(['nom' => explode(',', $materiaux)]);
             $materiaux = array_map(fn ($materiau) => $materiau->getId(), $materiaux);
         } else {
-            $materiaux = []; // Passer un tableau vide si la chaîne est vide
+            $materiaux = []; 
         }
 
         if ($categories !== "") { // Vérifier si la chaîne est vide
             $categories = $categoriesRepository->findBy(['categoryName' => explode(',', $categories)]);
             $categories = array_map(fn ($category) => $category->getId(), $categories);
         } else {
-            $categories = []; // Passer un tableau vide si la chaîne est vide
+            $categories = []; 
         }
 
         // Appeler le repository pour effectuer la recherche (avec les tableaux $materiaux et $categories)
