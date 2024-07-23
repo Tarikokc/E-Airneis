@@ -9,6 +9,8 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "amphp/http-client": "4.2.1",
+        "doctrine/annotations": "*",
         "doctrine/dbal": "^4.0",
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
