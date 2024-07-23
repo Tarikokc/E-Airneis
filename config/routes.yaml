@@ -8,3 +8,7 @@ controllers:
 index:
     path: /
     controller: App\Controller\ProduitController::index # Remplacez HomeController par votre contrôleur réel
+app_order_history:
+    path: /api/order/history
+    controller: App\Controller\OrderController::history # Remplacez HomeController par votre contrôleur réel
+    methods: [GET]
