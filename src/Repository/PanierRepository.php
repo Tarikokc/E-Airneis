@@ -35,7 +35,7 @@ class PanierRepository extends ServiceEntityRepository
     public function findPanierWithProductDetails(int $userId)
     {
         return $this->createQueryBuilder('p')
-            ->select('p', 'product.productId', 'product.Nom', 'product.Description', 'product.prix', 'product.Stock', 'photo.photoUrl') // Sélectionne photo.photoUrl
+            ->select('p.id', 'p.quantite', 'product.productId', 'product.Nom', 'product.Description', 'product.prix', 'product.Stock', 'photo.photoUrl') // Sélectionne photo.photoUrl
             ->leftJoin('p.produit', 'product')
             ->leftJoin('product.productPhotos', 'photo')
             ->andWhere('p.user = :userId')

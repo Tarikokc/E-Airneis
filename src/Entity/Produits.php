@@ -24,8 +24,6 @@ class Produits
     #[ORM\GeneratedValue]
     #[Groups("product:read")]
     #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
-
-
     private ?int $productId = null; 
 
     #[Groups("product:read")]
@@ -63,16 +61,18 @@ class Produits
     #[Groups("product:read")]
     private Collection $materiaux;
 
+    #[Groups("panier")]
     public function getProductId(): ?int
     {
         return $this->productId;
     }
-
+    #[Groups("panier")]
     public function getNom(): ?string
     {
         return $this->Nom;
     }
 
+    #[Groups("panier")]
     public function setNom(string $Nom): static
     {
         $this->Nom = $Nom;
@@ -91,23 +91,24 @@ class Produits
 
         return $this;
     }
-
+    #[Groups("panier")]
     public function getPrix(): ?int
     {
         return $this->prix;
     }
-
+    #[Groups("panier")]
     public function setPrix(int $prix): static
     {
         $this->prix = $prix;
 
         return $this;
     }
-
+    #[Groups("panier")]
     public function getStock(): ?int
     {
         return $this->Stock;
     }
+    #[Groups("panier")]
 
     public function setStock(int $Stock): static
     {

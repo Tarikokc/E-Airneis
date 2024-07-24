@@ -113,24 +113,38 @@ class PanierController extends AbstractController
             return $this->json(['error' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
         }
 
-        $panierItems = $entityManager->getRepository(Panier::class)->findPanierWithProductDetails($userId); // <-- Utiliser la nouvelle méthode
+        $panierItems = $entityManager->getRepository(Panier::class)->findPanierWithProductDetails($userId); 
 
-
-        $jsonContent = $serializer->serialize($panierItems, 'json', ['groups' => ['panier:read', 'produit:read', 'categories:read', 'materiaux:read']]);
-      
+        // Configuration de la sérialisation pour inclure l'ID du panier
+        $jsonContent = $serializer->serialize($panierItems, 'json', [
+            'groups' => ['panier:read', 'produit:read', 'categories:read', 'materiaux:read'],
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+    
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/api/panier/{panierId}', name: 'api_update_panier', methods: ['PUT'])]
-    public function updatePanier(Request $request, int $panierId, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/panier/{productId}/{userId}', name: 'api_update_panier', methods: ['PUT'])]
+    public function updatePanier(Request $request, int $productId, int $userId, EntityManagerInterface $entityManager): JsonResponse
     {
-        $panier = $entityManager->getRepository(Panier::class)->find($panierId);
+
+        $panier = $entityManager->getRepository(Panier::class)->findOneBy([
+            'produit' => $productId, // Utilisez 'product' (qui fait référence à l'entité Produit)
+            'user' => $userId,
+        ]);
+
+        // $panier = $entityManager->getRepository(Panier::class)->find($panierId);
+
 
         if (!$panier) {
             return $this->json(['error' => 'Article du panier non trouvé'], Response::HTTP_NOT_FOUND);
         }
 
         $data = json_decode($request->getContent(), true);
+        
+        
         $newQuantity = $data['quantite'] ?? null;
 
         if ($newQuantity === null || $newQuantity < 1) {
@@ -140,13 +154,23 @@ class PanierController extends AbstractController
         $panier->setQuantite($newQuantity);
         $entityManager->flush();
 
-        return $this->json(['success' => 'Quantité mise à jour', 'panier' => $panier]);
+        return $this->json(['success' => 'Quantité mise à jour', 'panier' => $panier], 200, [], [
+            'groups' => 'panier',
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);    
     }
 
-    #[Route('/api/panier/{panierId}', name: 'api_delete_panier', methods: ['DELETE'])]
-    public function deletePanier(int $panierId, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/panier/{productId}/{userId}', name: 'api_delete_panier', methods: ['DELETE'])]
+    public function deletePanier(int $productId, int $userId, EntityManagerInterface $entityManager): JsonResponse
     {
-        $panier = $entityManager->getRepository(Panier::class)->find($panierId);
+
+        $panier = $entityManager->getRepository(Panier::class)->findOneBy([
+            'produit' => $productId, // Utilisez 'product' (qui fait référence à l'entité Produit)
+            'user' => $userId,
+        ]);
+        // $panier = $entityManager->getRepository(Panier::class)->find($panierId);
 
         if (!$panier) {
             return $this->json(['error' => 'Article du panier non trouvé'], Response::HTTP_NOT_FOUND);

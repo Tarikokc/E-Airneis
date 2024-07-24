@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PanierRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
 #[Broadcast]
@@ -17,10 +18,12 @@ class Panier
 
     #[ORM\ManyToOne(targetEntity: User::class)] 
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id")]
+    #[Groups("panier")] // Ajoutez le groupe de sérialisation
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Produits::class)] 
-    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")] 
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")]
+    #[Groups("panier")] // Ajoutez le groupe de sérialisation 
     private ?Produits $produit = null;
 
     #[ORM\Column]
@@ -46,11 +49,13 @@ class Panier
         return $this;
     }
 
+
+    #[Groups("panier")] // Ajoutez le groupe de sérialisation
     public function getProduit(): ?Produits
     {
         return $this->produit;
     }
-
+    #[Groups("panier")] // Ajoutez le groupe de sérialisation
     public function setProduit(?Produits $produit): static
     {
         $this->produit = $produit;
