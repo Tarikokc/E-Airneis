@@ -30,6 +30,7 @@ class Materiaux
     public function __construct()
     {
         $this->produits = new ArrayCollection();
+        
     }
 
     // Getters et setters

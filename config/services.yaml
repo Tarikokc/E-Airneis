@@ -19,9 +19,52 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Controller\Admin\:
-        resource: '../src/Controller/Admin'
-        tags: ['controller.service_arguments']
+    # App\Controller\Admin\:
+    #     resource: '../src/Controller/Admin'
+    #     tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    # App\Service\DashboardService:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+   
+    admin.produits:
+        class: App\Admin\ProduitsAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Produits, controller: ~, manager_type: orm, group: admin, label: Produits }
+
+    admin.categories:
+        class: App\Admin\CategoriesAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Categories, controller: ~, manager_type: orm, group: admin, label: Categories }
+
+    admin.panier:
+        class: App\Admin\PanierAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Panier, controller: ~, manager_type: orm, group: admin, label: Panier }
+
+    admin.user:
+        class: App\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\User, controller: ~, manager_type: orm, group: admin, label: User }
+
+    admin.product_photo:
+        class: App\Admin\ProductPhotoAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\ProductPhoto, controller: ~, manager_type: orm, group: admin, label: ProductPhoto }
+
+    admin.designer:
+        class: App\Admin\DesignerAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Designer, controller: ~, manager_type: orm, group: admin, label: Designer }
+
+    admin.materiaux:
+        class: App\Admin\MateriauxAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Materiaux, controller: ~, manager_type: orm, group: admin, label: Materiaux }
+
+    admin.product_materials:
+        class: App\Admin\ProductMaterialsAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\ProductMaterials, controller: ~, manager_type: orm, group: admin, label: ProductMaterials }

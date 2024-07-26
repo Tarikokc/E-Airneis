@@ -45,9 +45,8 @@ class OrderController extends AbstractController
         foreach ($orders as $order) {
             $orderData[] = [
                 'order_id' => $order->getOrderId(),
-                'order_date' => $order->getOrderDate()?->format('Y-m-d'), // Format the date
+                'order_date' => $order->getOrderDate()?->format('Y-m-d'), 
                 'total_amount' => $order->getTotalAmount(),
-                // ... autres données de la commande (produits, etc.)
             ];
         }
 

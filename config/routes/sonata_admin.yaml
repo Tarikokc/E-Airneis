@@ -1,0 +1,15 @@
+admin_area:
+    resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin
+
+    # dashboard:
+    #     blocks:
+    #         - 
+    #             type: sonata.admin.block.dashboard # Type de bloc pour le tableau de bord
+    #             controller: App\Controller\Admin\DashboardController::class # Contrôleur du tableau de bord
+    #             template: 'admin/dashboard.html.twig' # Template du tableau de bord

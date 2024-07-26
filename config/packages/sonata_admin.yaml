@@ -1,0 +1,18 @@
+sonata_admin:
+    title: 'Sonata Admin'
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+            # - { position: right, type: sonata.admin.block.container, settings: {
+            #       class: "col-md-12", # Ou une autre classe pour la largeur
+            #       children: [
+            #           { type: sonata.block.service.average_basket, settings: { title: "Panier moyen par catégorie" } }
+            #       ]
+            #     }
+            # }
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+        
