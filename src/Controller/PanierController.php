@@ -167,9 +167,10 @@ class PanierController extends AbstractController
     {
 
         $panier = $entityManager->getRepository(Panier::class)->findOneBy([
-            'produit' => $productId, // Utilisez 'product' (qui fait référence à l'entité Produit)
+            'produit' => $productId,
             'user' => $userId,
         ]);
+        
         // $panier = $entityManager->getRepository(Panier::class)->find($panierId);
 
         if (!$panier) {

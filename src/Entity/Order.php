@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`orders`')] 
+#[ORM\Table(name: '`orders`')]
 class Order
 {
     #[ORM\Id]
@@ -24,7 +24,7 @@ class Order
     private ?\DateTimeInterface $order_date = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?string $total_amount = null;
+    private ?float $total_amount = null;  // Changez le type en float
 
     // Getters and setters
 
@@ -32,6 +32,14 @@ class Order
     {
         return $this->order_id;
     }
+
+    public function setOrderId(?int $order_id): self // Remplacez order_id par orderId
+    {
+        $this->order_id = $order_id;
+        return $this;
+    }
+
+
 
     public function getUser(): ?User
     {
@@ -57,12 +65,12 @@ class Order
         return $this;
     }
 
-    public function getTotalAmount(): ?string
+    public function getTotalAmount(): ?float
     {
         return $this->total_amount;
     }
 
-    public function setTotalAmount(?string $total_amount): self
+    public function setTotalAmount(?float $total_amount): self  
     {
         $this->total_amount = $total_amount;
 
