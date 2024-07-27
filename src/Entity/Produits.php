@@ -48,6 +48,7 @@ class Produits
 
     #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id")]
+    #[Groups("product:read")] 
     private ?Categories $category = null;
 
    

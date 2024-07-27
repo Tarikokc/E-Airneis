@@ -32,6 +32,20 @@ class ProduitsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    /**
+     * @return Produits|null Returns a single Produits object with its category
+     */
+    public function findById($productId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p', 'c')
+            ->leftJoin('p.category', 'c')
+            ->andWhere('p.productId = :productId')
+            ->setParameter('productId', $productId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
     /**
      * @return Produits[] Returns an array of Produits objects filtered by search term
@@ -42,11 +56,12 @@ class ProduitsRepository extends ServiceEntityRepository
 
         if ($searchTerm) {
             $qb->andWhere('p.Nom LIKE :searchTerm')
-               ->setParameter('searchTerm', '%' . $searchTerm . '%');
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
         }
 
         return $qb->getQuery()->getResult();
     }
+
 
     public function findBySearchCriteria(string $searchTerm, array $materials = [], $prixMin = null, $prixMax = null, array $categories = [], bool $enStock = false, string $sort = 'prix-asc'): array
     {
@@ -94,9 +109,9 @@ class ProduitsRepository extends ServiceEntityRepository
             case 'prix-desc':
                 $qb->orderBy('p.prix', 'DESC');
                 break;
-            // Ajoutez d'autres cas de tri si nécessaire
+                // Ajoutez d'autres cas de tri si nécessaire
         }
-        
+
         return $qb->getQuery()->getResult();
     }
 }

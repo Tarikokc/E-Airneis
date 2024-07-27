@@ -29,8 +29,6 @@ class OrderController extends AbstractController
     public function history(int $userId, OrderRepository $orderRepository, EntityManagerInterface $entityManager): JsonResponse
     {
 
-        // $user = new User();
-        // $Test = $this -> userRepository -> findOneBy(["email" => "dadada@ia.com"]);
         $user = $entityManager->getRepository(User::class)->find($userId);
 
 
@@ -41,7 +39,7 @@ class OrderController extends AbstractController
             );
         }
 
-        $orders = $orderRepository->findByUser($userId); // Utilisation du repository
+        $orders = $orderRepository->findByUser($userId); 
 
         $orderData = [];
         foreach ($orders as $order) {
@@ -55,43 +53,14 @@ class OrderController extends AbstractController
         return $this->json($orderData);
     }
 
-    // #[Route('/api/order/{userId}/create', name: 'app_order_create', methods: ['POST'])]
-    // public function create(int $userId, Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     // 1. Récupérer les données de la requête (sans orderId)
-    //     $orderDate = new \DateTime($request->request->get('orderDate'));
-    //     $totalAmount = $request->request->get('totalAmount');
-
-
-    //     // Récupérer l'utilisateur en utilisant l'ID de la route
-    //     $user = $entityManager->getRepository(User::class)->find($userId);
-    //     if (!$user) {
-    //         return $this->json(['error' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
-    //     }
-
-    //     // 4. Créer l'entité Order (sans setOrderId)
-    //     $order = new Order();
-    //     $order->setUser($user);
-    //     $order->setOrderDate($orderDate);
-    //     $order->setTotalAmount($totalAmount);
-
-    //     // 5. Sauvegarder en base de données
-    //     $entityManager->persist($order);
-    //     $entityManager->flush();
-
-    //     // 6. Renvoyer une réponse (vous pouvez renvoyer l'orderId généré)
-    //     return $this->json(['message' => 'Commande créée avec succès', 'orderId' => $order->getOrderId()]);
-    // }
     #[Route('/api/order/{userId}/create', name: 'app_order_create', methods: ['POST'])]
     public function create(int $userId, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // 1. Get Data from Request (JSON body)
         $data = json_decode($request->getContent(), true); 
         if (!$data) {
             return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
         }
         
-        // Check for required fields
         $requiredFields = ['orderDate', 'totalAmount'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
@@ -99,27 +68,22 @@ class OrderController extends AbstractController
             }
         }
 
-        // 2. Validate Data 
-        $orderDate = new \DateTime($data['orderDate']); // Handle invalid date format
-        $totalAmount = (float) $data['totalAmount']; // Ensure numeric value
+        $orderDate = new \DateTime($data['orderDate']); 
+        $totalAmount = (float) $data['totalAmount']; 
 
-        // 3. Fetch User
         $user = $entityManager->getRepository(User::class)->find($userId);
         if (!$user) {
             return $this->json(['error' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
         }
 
-        // 4. Create and Populate Order Entity
         $order = new Order();
         $order->setUser($user);
         $order->setOrderDate($orderDate);
-        $order->setTotalAmount($totalAmount); // Type-casting to float
+        $order->setTotalAmount($totalAmount); 
 
-        // 5. Persist and Flush
         $entityManager->persist($order);
         $entityManager->flush();
 
-        // 6. Return Success Response
         return $this->json(
             ['message' => 'Commande créée avec succès', 'orderId' => $order->getOrderId()], 
             Response::HTTP_CREATED

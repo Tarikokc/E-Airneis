@@ -58,13 +58,16 @@ class ProduitController extends AbstractController
     #[Route('/api/produit/{productId}', name: 'app_single_produit_api', methods: ['GET'])]
     public function getProduct(int $productId): JsonResponse
     {
-        $product = $this->produitRepository->find($productId);
+        // $product = $this->produitRepository->find($productId);
+        $product = $this->produitRepository->findById($productId);
 
         if (!$product) {
             return $this->json(['message' => 'Produit non trouvé.'], Response::HTTP_NOT_FOUND);
         }
+        $product->getCategory()->getCategoryId(); // Forcer le chargement de la catégorie
 
-        $jsonContent = $this->serializer->serialize($product, 'json', ['groups' => ['product:read', 'materials:read']]);
+
+        $jsonContent = $this->serializer->serialize($product, 'json', ['groups' => ['product:read', 'category:read', 'materiaux:read']]); 
 
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
