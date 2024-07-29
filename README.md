@@ -5,15 +5,23 @@ Ce backend Symfony fournit l'API REST pour l'application e-commerce. Il gère le
 * **Produits**
 * **Catégories**
 * **Commandes**
-* **Utilisateurs**
-* **...** (Ajoutez toutes les autres entités pertinentes)
+* **User**
+* **Order**
+* **OrderDetail**
+* **Panier**
+* **ProductMaterials**
+* **Message**
+* **ProductPhoto**
+* **Designer**
+
+
+
 
 ## Prérequis
 
 * PHP 8.1 ou supérieur
 * Symfony 6.x
-* MySQL ou MariaDB
-* Composer
+* MySQL
 
 ## Installation
 
