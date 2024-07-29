@@ -92,4 +92,9 @@ class Order
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->order_id; // Ou une autre propriété qui identifie l'utilisateur
+    }
 }

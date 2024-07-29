@@ -278,4 +278,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->paymentMethod = $paymentMethod;
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->email; // Ou une autre propriété qui identifie l'utilisateur
+    }
 }

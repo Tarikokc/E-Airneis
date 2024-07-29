@@ -72,3 +72,10 @@ services:
         class: App\Admin\ProductMaterialsAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\ProductMaterials, controller: ~, manager_type: orm, group: admin, label: ProductMaterials }
+
+    App\Admin\OrderAdmin:
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Order, controller: ~, manager_type: orm, group: admin, label: "Commandes" }
+    App\Admin\OrderDetailAdmin:
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\OrderDetail, controller: ~, manager_type: orm, group: admin, label: "Détails de commande" }

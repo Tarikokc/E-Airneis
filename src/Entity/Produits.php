@@ -215,4 +215,9 @@ class Produits
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->Nom; // Ou une autre propriété qui identifie l'utilisateur
+    }
 }
