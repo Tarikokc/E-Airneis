@@ -1,4 +1,4 @@
-# Backend Symfony
+# API REST E-Airneis - Backend Symfony
 
 Ce backend Symfony fournit l'API REST pour l'application e-commerce. Il gère les opérations CRUD (Create, Read, Update, Delete) sur les entités suivantes :
 
