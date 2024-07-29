@@ -12,9 +12,40 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException; // Import correct
-
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 class RegistrationController extends AbstractController
 {
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Enregistrer un nouvel utilisateur",
+     *     description="Crée un nouveau compte utilisateur avec les informations fournies.",
+     *     tags={"Authentification"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données du nouvel utilisateur",
+     *         @OA\JsonContent(ref=@Model(type=User::class, groups={"registration"})) 
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Utilisateur créé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User registered successfully"),
+     *             @OA\Property(property="token", type="string", description="Token d'authentification"),
+     *             @OA\Property(property="user", type="object", ref=@Model(type=User::class, groups={"user:read"}))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Données invalides ou email déjà existant"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
+     */
     #[Route('/api/register', name: 'app_register', methods: ['POST'])]
     public function register(
         Request $request,

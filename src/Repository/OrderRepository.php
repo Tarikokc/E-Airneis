@@ -27,10 +27,9 @@ class OrderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->andWhere('o.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('o.order_date', 'DESC') // Trier par date de commande (la plus récente en premier)
+            ->orderBy('o.order_date', 'DESC') 
             ->getQuery()
             ->getResult();
     }
 
-    // ... (autres méthodes de requête personnalisées si besoin)
 }

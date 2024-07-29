@@ -9,59 +9,99 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+/**
+ * @OA\Schema(
+ *     description="Modèle de données pour un utilisateur",
+ *     title="User"
+ * )
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
 #[Broadcast]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @OA\Property(description="ID de l'utilisateur")
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     #[ORM\Column(type: 'integer', name: 'user_id')]
     private ?int $id = null;
+    /**
+     * @OA\Property(description="Adresse e-mail de l'utilisateur")
+     */
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
+    /**
+     * @OA\Property(description="Mot de passe hashé de l'utilisateur")
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
+    /**
+     * @OA\Property(description="Prénom de l'utilisateur")
+     */
     #[ORM\Column(name: 'first_name', length: 50, nullable: true)]
     private ?string $firstName = null;
 
+    /**
+     * @OA\Property(description="Nom de famille de l'utilisateur")
+     */
     #[ORM\Column(name: 'last_name', length: 50, nullable: true)]
     private ?string $lastName = null;
 
+    /**
+     * @OA\Property(description="Adresse de l'utilisateur")
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
+    /**
+     * @OA\Property(description="Ville de l'utilisateur")
+     */
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $city = null;
-
+    /**
+     * @OA\Property(description="Pays de l'utilisateur")
+     */
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $country = null;
-
+    /**
+     * @OA\Property(description="Numéro de téléphone de l'utilisateur")
+     */
     #[ORM\Column(name: 'phone_number', length: 20, nullable: true)]
     private ?string $phoneNumber = null;
-
+    /**
+     * @OA\Property(description="Date d'enregistrement de l'utilisateur")
+     */
     #[ORM\Column(name: 'registration_date', nullable: true)]
     private ?\DateTimeInterface $registrationDate = null;
-
+    /**
+     * @OA\Property(description="Rôle de l'utilisateur")
+     */
     #[ORM\Column(type: 'boolean')]
     private bool $role;
-
+    /**
+     * @OA\Property(description="Token de l'utilisateur")
+     */
     #[ORM\Column(length: 255, nullable: true)] // Ajout du champ token
     private ?string $token = null;
-
+    /**
+     * @OA\Property(description="Le moyen de paiement de l'utilisateur")
+     */
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $paymentMethod = null;
 
-    
-    #[Groups("panier")]
+
+    #[Groups(["panier", "order_details_with_products"])]
     public function getUserId(): ?int
     {
         return $this->id;
     }
 
+    #[Groups('order_details_with_products')]
     public function getEmail(): ?string
     {
         return $this->email;
@@ -86,10 +126,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[Groups(["panier", "order_details_with_products"])]
+
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
+
 
     public function setFirstName(?string $firstName): self
     {
@@ -97,6 +140,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    #[Groups(["panier", "order_details_with_products"])]
 
     public function getLastName(): ?string
     {
@@ -110,17 +154,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[Groups(["panier", "order_details_with_products"])]
+
     public function getAddress(): ?string
     {
         return $this->address;
     }
-
+    #[Groups(["panier", "order_details_with_products"])]
     public function setAddress(?string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
+    #[Groups(["panier", "order_details_with_products"])]
 
     public function getCity(): ?string
     {
@@ -134,6 +181,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[Groups(["panier", "order_details_with_products"])]
+
     public function getCountry(): ?string
     {
         return $this->country;
@@ -145,6 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    #[Groups(["panier", "order_details_with_products"])] 
 
     public function getPhoneNumber(): ?string
     {
@@ -210,16 +260,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    public function getToken(): ?string 
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
-    public function setToken(?string $token): self 
+    public function setToken(?string $token): self
     {
         $this->token = $token;
         return $this;
     }
+    #[Groups(["panier", "order_details_with_products"])] 
     public function getPaymentMethod(): ?string
     {
         return $this->paymentMethod;

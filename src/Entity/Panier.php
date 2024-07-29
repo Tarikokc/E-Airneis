@@ -6,29 +6,54 @@ use App\Repository\PanierRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema()
+ */
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
 #[Broadcast]
 class Panier
 {
+    
+    /**
+     * @OA\Property(description="ID du panier")
+     * @Groups({"panier:read"})
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @OA\Property(description="Utilisateur associé au panier")
+     * @Groups({"panier:read"})
+     */
     #[ORM\ManyToOne(targetEntity: User::class)] 
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id")]
     #[Groups("panier")] // Ajoutez le groupe de sérialisation
     private ?User $user = null;
 
+    /**
+     * @OA\Property(description="Produit dans le panier")
+     * @Groups({"panier:read"})
+     */
     #[ORM\ManyToOne(targetEntity: Produits::class)] 
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")]
     #[Groups("panier")] // Ajoutez le groupe de sérialisation 
     private ?Produits $produit = null;
 
+    /**
+     * @OA\Property(description="Quantité du produit dans le panier")
+     * @Groups({"panier:read"})
+     */
     #[ORM\Column]
     private ?int $quantite = null;
 
+    /**
+     * @OA\Property(description="Prix du produit dans le panier")
+     * @Groups({"panier:read"})
+     */
     #[ORM\Column]
     private ?float $prix = null;
 

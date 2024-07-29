@@ -16,6 +16,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
         "easycorp/easyadmin-bundle": "^4.10",
+        "nelmio/api-doc-bundle": "^4.29",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.28",
@@ -23,6 +24,7 @@
         "sonata-project/block-bundle": "^5.1",
         "sonata-project/doctrine-orm-admin-bundle": "^4.17",
         "stripe/stripe-php": "^15.3",
+        "swagger-api/swagger-ui": "*",
         "symfony/asset": "7.0.*",
         "symfony/asset-mapper": "7.0.*",
         "symfony/console": "7.0.*",
@@ -54,7 +56,8 @@
         "symfony/web-link": "7.0.*",
         "symfony/yaml": "7.0.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "zircote/swagger-php": "^4.10"
     },
     "config": {
         "allow-plugins": {

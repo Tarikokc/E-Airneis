@@ -15,6 +15,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ContactController extends AbstractController
 {
+    /**
+     * @OA\Post(
+     *     path="/api/contact",
+     *     summary="Soumettre un message de contact",
+     *     description="Envoie un message de contact à l'administrateur du site.",
+     *     tags={"Contact"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données du message de contact",
+     *         @OA\JsonContent(ref=@Model(type=Message::class, groups={"message:read"}))
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Message envoyé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation des données",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="object", description="Liste des erreurs de validation")
+     *         )
+     *     )
+     * )
+     */
     #[Route('/api/contact', name: 'app_contact_submit', methods: ['POST'])]
     public function submit(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {

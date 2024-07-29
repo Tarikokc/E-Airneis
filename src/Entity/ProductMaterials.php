@@ -4,21 +4,33 @@ namespace App\Entity;
 use App\Repository\ProductMaterialsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @OA\Schema(
+ *     description="Représente la relation entre un produit et un matériau."
+ * )
+ */
 #[ORM\Entity(repositoryClass: ProductMaterialsRepository::class)]
-#[ORM\Table(name: 'product_materials')] // Correction du nom de la table
+#[ORM\Table(name: 'product_materials')] 
 class ProductMaterials
 {
+     /**
+     * @OA\Property(description="Produit associé au matériau")
+     * @Groups({"materiaux:read", "product:read"})
+     */
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Produits::class, inversedBy: 'productMaterials')]
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'product_id', onDelete: 'CASCADE')] 
-    private Produits $produit; // Relation avec l'entité Produits
+    private Produits $produit; 
 
+    /**
+     * @OA\Property(description="Matériau associé au produit")
+     * @Groups({"materiaux:read", "product:read"})
+     */
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Materiaux::class, inversedBy: 'productMaterials')]
     #[ORM\JoinColumn(name: 'material_id', referencedColumnName: 'material_id', onDelete: 'CASCADE')]
-    private Materiaux $materiaux; // Relation avec l'entité Materiaux
+    private Materiaux $materiaux; 
 
-    // Getters et setters pour $produit et $materiaux
     public function getProduit(): Produits
     {
         return $this->produit;

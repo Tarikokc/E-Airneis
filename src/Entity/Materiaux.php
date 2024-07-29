@@ -11,19 +11,34 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MateriauxRepository::class)]
 #[ORM\Table(name: "materials")] // Utilisez "products" au lieu de "produits"
-
+/**
+ * @OA\Schema(
+ *     description="Modèle de données pour un materiaux",
+ *     title="Materiaux"
+ * )
+ */
 class Materiaux
 {
+    /**
+     * @OA\Property(description="ID du materiaux")
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "material_id")] // Indiquez que product_id est l'ID
     #[Groups("materials:read")]
     private ?int $id = null;
 
+    /**
+     * @OA\Property(description="Nom du materiaux")
+     */
     #[ORM\Column(name: "material_name")] // Indiquez que product_id est l'ID
     #[Groups("materials:read")]
     private ?string $nom = null;
 
+    /**
+     * @var Collection<int, Produits>
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/Produits"))
+     */
     #[ORM\ManyToMany(targetEntity: Produits::class, mappedBy: 'materials')]
     private Collection $produits;
 

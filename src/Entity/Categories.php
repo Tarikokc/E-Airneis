@@ -9,13 +9,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @OA\Schema(
+ *     description="Représente une catégorie de produit."
+ * )
+ */
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 #[ORM\Table(name: "productcategories")]
 #[Broadcast]
-
 class Categories
 {
 
+    /**
+     * @var Collection<int, Produits>
+     * @ORM\OneToMany(mappedBy="category", targetEntity=Produits::class)
+     */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Produits::class)]
     private Collection $produits;
 
@@ -23,18 +31,30 @@ class Categories
     {
         $this->produits = new ArrayCollection();
     }
+    /**
+     * @OA\Property(description="ID de la catégorie")
+     * @Groups({"category:read"})
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "category_id")]
     #[Groups("category:read")]
     private ?int $categoryId = null;
 
+    /**
+     * @OA\Property(description="Nom de la catégorie")
+     * @Groups({"category:read"})
+     */
     #[ORM\Column(name: "category_name", length: 50)]
     #[Groups("category:read")]
     private ?string $categoryName = null;
 
+    /**
+     * @OA\Property(description="URL de la photo par défaut de la catégorie")
+     * @Groups({"category:read"})
+     */
     #[Groups("category:read")]
-    public ?string $defaultPhotoUrl = null; // Propriété pour stocker l'URL de l'image par défaut
+    public ?string $defaultPhotoUrl = null; 
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
@@ -73,7 +93,6 @@ class Categories
     public function removeProduit(Produits $produit): self
     {
         if ($this->produits->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
             if ($produit->getCategory() === $this) {
                 $produit->setCategory(null);
             }

@@ -6,41 +6,52 @@ use App\Repository\OrderRepository;
 use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\Collection; // Ajoutez cette ligne
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`orders`')]
 class Order
 {
+    public function __construct()
+    {
+        $this->orderDetails = new ArrayCollection(); // Initialisation de la collection
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $order_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'order')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: false)] // Assuming your User entity has an 'id' field
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: false)]
+    #[Groups('order_details_with_products')]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $order_date = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?float $total_amount = null;  // Changez le type en float
+    private ?float $total_amount = null;
 
-    // Getters and setters
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderDetail::class)]
+    #[Groups('order_details_with_products')]
+    private Collection $orderDetails;
 
     public function getOrderId(): ?int
     {
         return $this->order_id;
     }
 
-    public function setOrderId(?int $order_id): self // Remplacez order_id par orderId
+    public function setOrderId(?int $order_id): self
     {
         $this->order_id = $order_id;
         return $this;
     }
 
 
-
+    #[Groups('order_details_with_products')]
     public function getUser(): ?User
     {
         return $this->user;
@@ -51,6 +62,11 @@ class Order
         $this->user = $user;
 
         return $this;
+    }
+    #[Groups('order_details_with_products')] // Ajouté
+    public function getOrderDetails(): Collection
+    {
+        return $this->orderDetails;
     }
 
     public function getOrderDate(): ?\DateTimeInterface
@@ -70,7 +86,7 @@ class Order
         return $this->total_amount;
     }
 
-    public function setTotalAmount(?float $total_amount): self  
+    public function setTotalAmount(?float $total_amount): self
     {
         $this->total_amount = $total_amount;
 

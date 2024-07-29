@@ -9,9 +9,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 class AccountSettingsController extends AbstractController
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/account/{userId}",
+     *     summary="Récupérer les informations d'un utilisateur",
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Informations de l'utilisateur",
+     *         @OA\JsonContent(ref="#/components/schemas/User") 
+     *     ),
+     *     @OA\Response(response=404, description="Utilisateur non trouvé")
+     * )
+     */
+
     #[Route('/api/account/{userId}', name: 'api_get_account', methods: ['GET'])]
     public function getAccount(int $userId, EntityManagerInterface $entityManager): Response
     {
@@ -39,6 +61,30 @@ class AccountSettingsController extends AbstractController
 
         return $this->json($userData);
     }
+    /**
+     * @OA\Put(
+     *     path="/api/account/{userId}",
+     *     summary="Mettre à jour les informations d'un utilisateur",
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Nouvelles données de l'utilisateur",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UserUpdate") 
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Informations mises à jour avec succès"
+     *     ),
+     *     @OA\Response(response=400, description="Données invalides")
+     *     @OA\Response(response=404, description="Utilisateur non trouvé")
+     * )
+     */
 
     #[Route('/api/account/{userId}', name: 'api_update_account', methods: ['PUT'])]
     public function updateAccount(int $userId, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
@@ -86,7 +132,32 @@ class AccountSettingsController extends AbstractController
 
         return $this->json(['message' => 'Informations mises à jour avec succès !']);
     }
-
+    /**
+     * @OA\Delete(
+     *     path="/api/account/{userId}/{field}",
+     *     summary="Supprimer un champ spécifique des informations d'un utilisateur",
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="field",
+     *         in="path",
+     *         description="Champ à supprimer (address, city, phoneNumber)",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Champ supprimé avec succès"
+     *     ),
+     *     @OA\Response(response=400, description="Champ non autorisé")
+     *      @OA\Response(response=404, description="Utilisateur non trouvé")
+     * )
+     */
     #[Route('/api/account/{userId}/{field}', name: 'api_delete_account_field', methods: ['DELETE'])]
     public function deleteAccountField(int $userId, string $field, EntityManagerInterface $entityManager): Response
     {
@@ -94,12 +165,12 @@ class AccountSettingsController extends AbstractController
          * @var User $user
          */
         $user = $entityManager->getRepository(User::class)->find($userId);
-    
+
         $allowedFields = ['address', 'city', 'phoneNumber']; // Champs autorisés
         if (!in_array($field, $allowedFields)) {
             return $this->json(['error' => 'Champ non autorisé à la suppression'], Response::HTTP_BAD_REQUEST);
         }
-    
+
         // Mise à null du champ correspondant
         switch ($field) {
             case 'address':
@@ -112,10 +183,9 @@ class AccountSettingsController extends AbstractController
                 $user->setPhoneNumber(null);
                 break;
         }
-    
+
         $entityManager->flush();
-    
+
         return $this->json(['message' => 'Champ supprimé avec succès !']);
     }
-    
 }

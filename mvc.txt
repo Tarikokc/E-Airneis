@@ -1,7 +1,5 @@
-User
-De facon simple explique moi les dossiers
-ChatGPT
-Bien sûr, voici une explication simple des principaux dossiers que l'on trouve généralement dans une application Symfony :
+
+Les dossiers de notre application Symfony :
 
 src/ : C'est le répertoire où vous placez tout le code source de votre application Symfony. Il contient plusieurs sous-répertoires :
 

@@ -4,36 +4,61 @@ namespace App\Entity;
 
 use App\Repository\OrderDetailRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+/**
+ * @OA\Schema(
+ *     description="Représente les détails d'une ligne de commande."
+ * )
+ */
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
 #[ORM\Table(name: "orderdetails")]
 class OrderDetail
 {
+     /**
+     * @OA\Property(description="ID du détail de la commande")
+     * @Groups({"order:read"})
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "order_detail_id")] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
+    #[ORM\Column(name: "order_detail_id")] 
     private ?int $orderDetailId = null; 
 
+    /**
+     * @OA\Property(description="Commande associée")
+     * @Groups({"order:read"})
+     */
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderDetails")]
     #[ORM\JoinColumn(name: "order_id", referencedColumnName: "order_id", nullable: false)]
-    private ?Order $order = null; // Changement du type en Order (entité)
+    private ?Order $order = null; 
 
+    /**
+     * @OA\Property(description="Produit associé")
+     * @Groups({"order:read"})
+     */
     #[ORM\ManyToOne(targetEntity: Produits::class)]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id", nullable: false)]
-    private ?Produits $product = null; // Changement du type en Product (entité)
+    private ?Produits $product = null;
 
-    #[ORM\Column(name: "quantity")] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
+    /**
+     * @OA\Property(description="Quantité commandée")
+     * @Groups({"order:read"})
+     */
+    #[ORM\Column(name: "quantity")] 
     private ?int $quantity = null;
 
-    #[ORM\Column(name: "unit_price", type: "decimal", precision: 10, scale: 2)] // Assurez-vous que le nom de la colonne correspond à celui de la base de données
-    private ?float $unitPrice = null; // Utilisation de float pour les prix
+    /**
+     * @OA\Property(description="Prix unitaire du produit", type="number", format="float")
+     * @Groups({"order:read"})
+     */
+    #[ORM\Column(name: "unit_price", type: "decimal", precision: 10, scale: 2)] 
+    private ?float $unitPrice = null; 
 
-    // Getters and setters (ajoutez les méthodes pour les autres propriétés)
     public function getOrderDetailId(): ?int
     {
         return $this->orderDetailId;
     }
-
+    #[Groups('order_details')]    
     public function getOrder(): ?Order
     {
         return $this->order;
@@ -46,12 +71,13 @@ class OrderDetail
         return $this;
     }
 
-    public function getProduct(): ?Product
+    #[Groups('order_details_with_products')]
+    public function getProduct(): ?Produits
     {
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(?Produits $product): self
     {
         $this->product = $product;
 

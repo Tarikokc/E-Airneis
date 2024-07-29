@@ -9,6 +9,12 @@ use Doctrine\Common\Collections\Collection; // Ajoutez cette ligne
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @OA\Schema(
+ *     description="Modèle de données pour un produit",
+ *     title="Produit"
+ * )
+ */
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
 #[ORM\Table(name: "products")] // Utilisez "products" au lieu de "produits"
 #[Broadcast]
@@ -20,38 +26,61 @@ class Produits
         $this->materiaux = new ArrayCollection(); // 
 
     }
+    /**
+     * @OA\Property(description="ID du produit")
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups("product:read")]
     #[ORM\Column(name: "product_id")] // Indiquez que product_id est l'ID
-    private ?int $productId = null; 
+    private ?int $productId = null;
 
+    /**
+     * @OA\Property(description="Nom du produit")
+     */
     #[Groups("product:read")]
     #[ORM\Column(name: "name", length: 255)]
     private ?string $Nom = null;
 
+    /**
+     * @OA\Property(description="Description du produit")
+     */
     #[Groups("product:read")]
     #[ORM\Column(length: 255)]
     private ?string $Description = null;
 
+    /**
+     * @OA\Property(description="Prix du produit")
+     */
     #[Groups("product:read")]
     #[ORM\Column(name: "price")]
     private ?int $prix = null;
 
+    /**
+     * @OA\Property(description="Quantité en stock du produit")
+     */
     #[Groups("product:read")]
     #[ORM\Column(name: "stock_quantity")]
     private ?int $Stock = null;
 
+
+    /**
+     * @var Collection<int, ProductPhoto>
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/ProductPhoto"))
+     */
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class)]
-    #[Groups("product:read")] 
+    #[Groups("product:read","order_details_with_products")]
     private Collection $productPhotos;
 
+    /**
+     * @OA\Property(ref="#/components/schemas/Categories")
+     */
     #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "category_id")]
-    #[Groups("product:read")] 
+    #[Groups("product:read")]
     private ?Categories $category = null;
 
-   
+
 
     #[ORM\ManyToMany(targetEntity: Materiaux::class, inversedBy: "produits", fetch: "EAGER")]
     #[ORM\JoinTable(
@@ -59,15 +88,19 @@ class Produits
         joinColumns: [new ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")],
         inverseJoinColumns: [new ORM\JoinColumn(name: "material_id", referencedColumnName: "material_id")]
     )]
+    /**
+     * @var Collection<int, Materiaux>
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/Materiaux")) 
+     */
     #[Groups("product:read")]
     private Collection $materiaux;
 
-    #[Groups("panier")]
+    #[Groups(["panier", "order_details_with_products"])] 
     public function getProductId(): ?int
     {
         return $this->productId;
     }
-    #[Groups("panier")]
+    #[Groups(["panier", "order_details_with_products"])] 
     public function getNom(): ?string
     {
         return $this->Nom;
@@ -81,6 +114,8 @@ class Produits
         return $this;
     }
 
+    #[Groups(["panier", "order_details_with_products"])] 
+
     public function getDescription(): ?string
     {
         return $this->Description;
@@ -92,7 +127,7 @@ class Produits
 
         return $this;
     }
-    #[Groups("panier")]
+    #[Groups(["panier", "order_details_with_products"])] 
     public function getPrix(): ?int
     {
         return $this->prix;
@@ -104,7 +139,7 @@ class Produits
 
         return $this;
     }
-    #[Groups("panier")]
+    #[Groups(["panier", "order_details_with_products"])] 
     public function getStock(): ?int
     {
         return $this->Stock;
@@ -120,6 +155,8 @@ class Produits
     /**
      * @return Collection<int, ProductPhoto>
      */
+
+     #[Groups(["panier", "order_details_with_products"])] 
     public function getProductPhotos(): Collection
     {
         return $this->productPhotos;
