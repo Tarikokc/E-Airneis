@@ -96,14 +96,11 @@ class AccountSettingsController extends AbstractController
         $user = $entityManager->getRepository(User::class)->find($userId);
         $data = json_decode($request->getContent(), true);
 
-        // Validations manuelles
         $errors = [];
-        // Exemple de validation pour le prénom (ajoutez d'autres validations selon vos besoins)
         if (empty($data['firstName']) || strlen($data['firstName']) < 2 || strlen($data['firstName']) > 50) {
             $errors['firstName'] = 'Le prénom doit contenir entre 2 et 50 caractères.';
         }
 
-        // Traitement du mot de passe (si présent dans les données)
         if (!empty($data['password'])) {
             if (strlen($data['password']) < 8) {
                 $errors['password'] = 'Le mot de passe doit contenir au moins 8 caractères.';
@@ -166,12 +163,11 @@ class AccountSettingsController extends AbstractController
          */
         $user = $entityManager->getRepository(User::class)->find($userId);
 
-        $allowedFields = ['address', 'city', 'phoneNumber']; // Champs autorisés
+        $allowedFields = ['address', 'city', 'phoneNumber']; 
         if (!in_array($field, $allowedFields)) {
             return $this->json(['error' => 'Champ non autorisé à la suppression'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Mise à null du champ correspondant
         switch ($field) {
             case 'address':
                 $user->setAddress(null);

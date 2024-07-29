@@ -1,7 +1,5 @@
 <?php
 
-// src/Controller/ProductCategoryController.php
-
 namespace App\Controller;
 
 use App\Repository\CategoriesRepository;
@@ -9,6 +7,7 @@ use App\Repository\ProduitsRepository; // Ajoute cet import
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 class CategorieController extends AbstractController
 {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API REST E-Airneis</title>
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}"> </head>
+<body>
+    <h1>API REST E-Airneis</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Chemin</th>
+                <th>Méthodes</th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for route in apiRoutes %}
+                <tr>
+                    <td>{{ route.getPath() }}</td>
+                    <td>{{ route.getMethods()|join(', ') }}</td>
+                    <td>{{ route.getDefault('_controller') }}</td>
+                    <td>
+                        {% if route.getDefault('_api_description') is defined %}
+                            {{ route.getDefault('_api_description') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if route.getRequirements()|length > 0 %}
+                            <ul>
+                                {% for name, requirement in route.getRequirements() %}
+                                    <li>{{ name }}: {{ requirement }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

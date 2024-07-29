@@ -232,22 +232,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Implementation of UserInterface methods
 
     public function getRoles(): array
     {
-        // Assuming role 1 represents 'ROLE_ADMIN' and role 0 represents 'ROLE_USER'
         return $this->role ? ['ROLE_ADMIN'] : ['ROLE_USER'];
     }
 
     public function getSalt(): ?string
     {
-        return null; // Not needed for modern algorithms
+        return null; 
     }
 
     public function eraseCredentials(): void
     {
-        // Clear any temporary, sensitive data if any
     }
 
     public function getUsername(): ?string

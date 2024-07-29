@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
+use OpenApi\Annotations as OA;
 
 class OrderController extends AbstractController
 {
@@ -168,23 +168,25 @@ class OrderController extends AbstractController
      *     path="/api/orders/{orderId}/details",
      *     summary="Ajouter des détails à une commande",
      *     description="Ajoute des articles (produits) à une commande existante.",
+     *     tags={"Commandes"},  // Tag pour regrouper les opérations liées aux commandes
      *     @OA\Parameter(
      *         name="orderId",
      *         in="path",
-     *         description="ID de la commande",
+     *         description="ID de la commande à laquelle ajouter les détails",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Détails des articles à ajouter",
+     *         description="Détails des articles à ajouter à la commande",
      *         @OA\JsonContent(
      *             type="array",
      *             @OA\Items(
      *                 type="object",
-     *                 @OA\Property(property="product_id", type="integer"),
-     *                 @OA\Property(property="quantity", type="integer"),
-     *                 @OA\Property(property="unit_price", type="number", format="float")
+     *                 required={"product_id", "quantity", "unit_price"},
+     *                 @OA\Property(property="product_id", type="integer", description="ID du produit"),
+     *                 @OA\Property(property="quantity", type="integer", description="Quantité du produit"),
+     *                 @OA\Property(property="unit_price", type="number", format="float", description="Prix unitaire du produit")
      *             )
      *         )
      *     ),
@@ -192,8 +194,14 @@ class OrderController extends AbstractController
      *         response=201,
      *         description="Détails de la commande ajoutés avec succès"
      *     ),
-     *     @OA\Response(response=400, description="Données invalides"),
-     *     @OA\Response(response=404, description="Commande non trouvée")
+     *     @OA\Response(
+     *         response=400,
+     *         description="Données invalides ou produit non trouvé" 
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Commande non trouvée"
+     *     )
      * )
      */
     #[Route('/api/orders/{orderId}/details', name: 'app_add_order_details', methods: ['POST'])]
@@ -244,34 +252,30 @@ class OrderController extends AbstractController
     }
 
 
-    // #[Route('/api/orders/{orderId}', name: 'app_order_get', methods: ['GET'])]
-    // public function getOrder(int $orderId, OrderDetailRepository $orderDetailRepository): JsonResponse
-    // {
-    //     $orderDetails = $orderDetailRepository->findByOrderId($orderId);
-
-    //     if (empty($orderDetails)) {
-    //         return $this->json(['error' => 'Aucun détail trouvé pour cette commande'], Response::HTTP_NOT_FOUND);
-    //     }
-
-    //     $formattedDetails = [];
-    //     foreach ($orderDetails as $detail) {
-    //         $product = $detail->getProduct();
-    //         $primaryPhoto = $product->getProductPhotos()->filter(function ($photo) {
-    //             return $photo->isIsPrimary();
-    //         })->first();
-
-    //         $formattedDetails[] = [
-    //             'product_id' => $product->getProductId(),
-    //             'product_name' => $product->getNom(),
-    //             'product_description' => $product->getDescription(),
-    //             'product_image' => $primaryPhoto ? $primaryPhoto->getPhotoUrl() : null,
-    //             'quantity' => $detail->getQuantity(),
-    //             'unit_price' => $detail->getUnitPrice(),
-    //         ];
-    //     }
-
-    //     return $this->json($formattedDetails, Response::HTTP_OK);
-    // }
+    /**
+     * @OA\Get(
+     *     path="/api/orders/{orderId}",
+     *     summary="Obtenir une commande par son ID",
+     *     description="Retourne les informations détaillées d'une commande, y compris ses produits.",
+     *     tags={"Commandes"},
+     *     @OA\Parameter(
+     *         name="orderId",
+     *         in="path",
+     *         description="L'ID de la commande à récupérer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Commande trouvée avec succès",
+     *         @OA\JsonContent(ref="#/components/schemas/Order")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Commande non trouvée"
+     *     )
+     * )
+     */
     #[Route('/api/orders/{orderId}', name: 'app_order_get', methods: ['GET'])]
     public function getOrder(int $orderId, OrderRepository $orderRepository, SerializerInterface $serializer): JsonResponse
     {
@@ -281,7 +285,6 @@ class OrderController extends AbstractController
             return $this->json(['error' => 'Commande non trouvée'], Response::HTTP_NOT_FOUND);
         }
 
-        // Sérialisation avec le groupe 'order_details_with_products'
         $jsonContent = $serializer->serialize($order, 'json', ['groups' => 'order_details_with_products']);
 
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);

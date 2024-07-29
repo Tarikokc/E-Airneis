@@ -13,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Psr\Log\LoggerInterface;
+use OpenApi\Annotations as OA;
 
 class LoginController extends AbstractController
 {

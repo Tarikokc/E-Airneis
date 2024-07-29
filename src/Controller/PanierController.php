@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use OpenApi\Annotations as OA;
 
 
 class PanierController extends AbstractController
@@ -194,6 +195,51 @@ class PanierController extends AbstractController
         return new JsonResponse($jsonContent, Response::HTTP_OK, [], true);
     }
 
+
+
+    /**
+     * @OA\Put(
+     *     path="/api/panier/{productId}/{userId}",
+     *     summary="Mettre à jour un article du panier",
+     *     description="Modifie la quantité d'un article existant dans le panier d'un utilisateur.",
+     *     tags={"Panier"},
+     *     @OA\Parameter(
+     *         name="productId",
+     *         in="path",
+     *         description="L'ID du produit à mettre à jour",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="L'ID de l'utilisateur propriétaire du panier",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Nouvelle quantité de l'article",
+     *         @OA\JsonContent(
+     *             required={"quantite"},
+     *             @OA\Property(property="quantite", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Quantité mise à jour avec succès",
+     *         @OA\JsonContent(ref="#/components/schemas/Panier")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Quantité invalide ou autre erreur"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Article non trouvé dans le panier"
+     *     )
+     * )
+     */
     #[Route('/api/panier/{productId}/{userId}', name: 'api_update_panier', methods: ['PUT'])]
     public function updatePanier(Request $request, int $productId, int $userId, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -228,6 +274,37 @@ class PanierController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @OA\Delete(
+     *     path="/api/panier/{productId}/{userId}",
+     *     summary="Supprimer un article du panier",
+     *     description="Retire un article du panier d'un utilisateur.",
+     *     tags={"Panier"},
+     *     @OA\Parameter(
+     *         name="productId",
+     *         in="path",
+     *         description="L'ID du produit à supprimer",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="L'ID de l'utilisateur propriétaire du panier",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Article supprimé avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Article non trouvé dans le panier"
+     *     )
+     * )
+     */
     #[Route('/api/panier/{productId}/{userId}', name: 'api_delete_panier', methods: ['DELETE'])]
     public function deletePanier(int $productId, int $userId, EntityManagerInterface $entityManager): JsonResponse
     {

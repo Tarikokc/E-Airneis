@@ -9,13 +9,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
 
 /**
- * @OA\Schema()
+ * @OA\Schema(
+ *     description="Modèle d'un article du panier (Panier)"
+ * )
  */
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
 #[Broadcast]
 class Panier
 {
-    
+
     /**
      * @OA\Property(description="ID du panier")
      * @Groups({"panier:read"})
@@ -29,7 +31,7 @@ class Panier
      * @OA\Property(description="Utilisateur associé au panier")
      * @Groups({"panier:read"})
      */
-    #[ORM\ManyToOne(targetEntity: User::class)] 
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id")]
     #[Groups("panier")] // Ajoutez le groupe de sérialisation
     private ?User $user = null;
@@ -38,7 +40,7 @@ class Panier
      * @OA\Property(description="Produit dans le panier")
      * @Groups({"panier:read"})
      */
-    #[ORM\ManyToOne(targetEntity: Produits::class)] 
+    #[ORM\ManyToOne(targetEntity: Produits::class)]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "product_id")]
     #[Groups("panier")] // Ajoutez le groupe de sérialisation 
     private ?Produits $produit = null;

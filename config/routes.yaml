@@ -4,14 +4,10 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-# config/routes.yaml
 index:
     path: /
-    controller: App\Controller\ProduitController::index 
+    controller: App\Controller\HomeController::index 
 
-# easy_admin_bundle:
-#     resource: '@EasyAdminBundle/Controller/'
-#     type: annotation
 
 app_contact_submit:
     path: /api/contact

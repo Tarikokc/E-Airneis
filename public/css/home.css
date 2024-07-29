@@ -1,0 +1,28 @@
+.api-table {
+    width: 100%;
+    border-collapse: collapse; 
+    margin-bottom: 20px;
+}
+
+.api-table th {
+    background-color: #f0f0f5;
+    color: #333; 
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+.api-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.api-table ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.api-table li {
+    margin-bottom: 5px;
+}
