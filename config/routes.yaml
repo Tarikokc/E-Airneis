@@ -4,6 +4,12 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+app_produits_index:
+    path: /api/produits
+    controller: App\Controller\ProduitController::index
+
+
+    
 index:
     path: /
     controller: App\Controller\HomeController::index 
